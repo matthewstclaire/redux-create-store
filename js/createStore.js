@@ -16,11 +16,10 @@ function createStore(reducer) {
   };
 }
 
-function reducer(state = { count: 0 }, action) {
+function candyReducer(state = [], action) {
   switch (action.type) {
-    case 'INCREASE_COUNT':
-      return { count: state.count + 1 };
-
+    case 'ADD_CANDY':
+      return [...state, action.candy];
     default:
       return state;
   }
@@ -28,13 +27,13 @@ function reducer(state = { count: 0 }, action) {
 
 function render() {
   let container = document.getElementById('container');
-  container.textContent = store.getState().count;
+  if (store.getState()) {
+    container.textContent = store.getState().join(' ');
+  } else {
+    throw new Error("the store's state has not been defined yet");
+  }
 }
 
-let store = createStore(reducer); // createStore takes the reducer as an argument
-store.dispatch({ type: '@@INIT' });
-let button = document.getElementById('button');
+let store = createStore(reducer);
 
-button.addEventListener('click', () => {
-  store.dispatch({ type: 'INCREASE_COUNT' });
-});
+store.dispatch({ type: '@@INIT' });
